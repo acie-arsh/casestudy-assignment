@@ -4,7 +4,7 @@ import "./ProfileList.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
-const profiles = [
+const initialProfiles = [
     {
         id : 1,
         name : "Arsh Chaudhary",
@@ -63,21 +63,27 @@ const profiles = [
 ]
 
 export default function ProfileList(){
+    const[profiles, setProfiles] = useState(initialProfiles); //used to update the dataset array
+
+    const [showSummaryModal, setshowSummaryModal] = useState(false);
+    const [selectedProfile, setSelectedProfile] = useState(null); //for summary modal display
     
-    const [showModal, setShowModal] = useState(false);
-    const [selectedProfile, setSelectedProfile] = useState(null);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [adminPassword, setAdminPassword] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);  
+    const [adminPassword, setAdminPassword] = useState(''); //for admin login
+
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [count, setCount] = useState(5);
 
     const handleSummaryClick = (profile) => {
         setSelectedProfile(profile);
-        setShowModal(true);
+        setshowSummaryModal(true);
     }
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const handleCloseSummaryModal = () => {
+        setshowSummaryModal(false);
         setSelectedProfile(null);
     }
+
 
     const handlePasswordChange = (e) => {
         setAdminPassword(e.target.value);
@@ -89,6 +95,20 @@ export default function ProfileList(){
         } else {
             alert('Incorrect Password');
         }
+    }
+
+    const handleAddProfile = () => {
+        setShowAddModal(true);
+    }
+
+    const handleCloseAddModal = () => {
+        setShowAddModal(false);
+    }
+
+    const handleSaveProfile = (newProfile) => {
+        setProfiles([...profiles, newProfile]);
+        setCount(count + 1);
+        setShowAddModal(false);
     }
     
     return(
@@ -105,10 +125,14 @@ export default function ProfileList(){
                     <button onClick={handleAdminLogin}>Login</button>
                 </div>
             )}
+
+            {isAdmin && (
+                <button className="decorBtn" onClick={handleAddProfile}>Add Profile</button>
+            )}
             
             {profiles.map((profile) => (
                 <div key={profile.id} className="profileSmall">
-                    <img src={profile.photo} alt={profile.name} className="profilePhoto" height="900" width="60"/>
+                    <img src={profile.photo} alt={profile.name} className="profilePhoto" height="60" width="60"/>
                     <h3 className="profileSmallName">{profile.name}</h3>
                     <p className="profileSmallDesc">{profile.description}</p>
                     {isAdmin && (
@@ -121,9 +145,63 @@ export default function ProfileList(){
                 </div>
             ))}
 
-            {showModal && (
-                <SummaryModal profile={selectedProfile} onClose={handleCloseModal} />
+            {showSummaryModal && (
+                <SummaryModal profile={selectedProfile} onClose={handleCloseSummaryModal} />
             )}
+
+            {showAddModal && (
+                <AddModal count={count} onSave={handleSaveProfile} onClose={handleCloseAddModal} />
+            )}
+        </div>
+    );
+}
+
+
+function AddModal({count, onSave, onClose}){
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [photo, setPhoto] = useState('');
+    const [location, setLocation] = useState('');
+    const [contact, setContact] = useState('');
+    const [interests, setInterests] = useState('');
+    const [maplat, setMaplat] = useState('');
+    const [maplng, setMaplng] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const newProfile = {
+            id: count + 1,
+            name,
+            description,
+            photo,
+            location,
+            contact,
+            interests: interests.split(','),
+            maplat: parseFloat(maplat),
+            maplng: parseFloat(maplng),
+        };
+
+        onSave(newProfile);
+    }
+
+    return (
+        <div className="modalOverlay">
+            <div className="modalContent">
+                <button onClick={onClose} className='modalCloseButton'>X</button>
+                <h1>Add New Profile</h1>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                    <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+                    <input type="text" placeholder="Photo URL" value={photo} onChange={(e) => setPhoto(e.target.value)} required />
+                    <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+                    <input type="text" placeholder="Contact" value={contact} onChange={(e) => setContact(e.target.value)} />
+                    <input type="text" placeholder="Interests (comma separated)" value={interests} onChange={(e) => setInterests(e.target.value)} />
+                    <input type="text" placeholder="Latitude" value={maplat} onChange={(e) => setMaplat(e.target.value)} required />
+                    <input type="text" placeholder="Longitude" value={maplng} onChange={(e) => setMaplng(e.target.value)} required />
+                    <button type="submit">Save</button>
+                </form>
+            </div>
         </div>
     );
 }

@@ -2,6 +2,30 @@
     box-sizing: border-box;
 }
 
+.decorBtn{
+    text-align: center;
+    border-radius: 4px;
+    border: 0px;
+    margin-right: 1dvw;
+    font-size: 1.2em;
+    background: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+    padding: 8px 0.8dvw;
+    font-weight: bold;
+    position:relative;
+    left:50%;
+}
+
+.decorBtn:hover{
+    animation-name: summarybutton;
+    animation-duration: 0.4s;
+    animation-iteration-count: infinite;
+}
+
+.decorBtn:active{
+    padding: 8px 0.4dvw;
+    background-color: #FFFB7D;
+}
+
 .profileSmall{
     display:flex;
     justify-content:space-between;
@@ -9,6 +33,7 @@
     background: rgba(0, 0, 0, 0.2);
     margin-bottom: 2.5dvh;
     border-radius: 18px;
+    max-height: 10dvh;
 }
 
 .profilePhoto{
@@ -73,7 +98,6 @@
     95% {background: linear-gradient(45deg, #FFFB7D 90%, #85FFBD 100% );}
     100% {background: linear-gradient(45deg, #FFFB7D 100%, #85FFBD 100%);}
 }
-
 
 
 .modalOverlay {
