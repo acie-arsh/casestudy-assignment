@@ -110,6 +110,17 @@ export default function ProfileList(){
         setCount(count + 1);
         setShowAddModal(false);
     }
+
+    const handleDeleteProfile = (id) => {
+        if(!window.confirm("Are you sure about that?")){
+            return;
+        }
+        setProfiles(prevProfiles => {
+            const updatedProfiles = prevProfiles.filter(profile => profile.id !== id);
+            return updatedProfiles;
+        });
+        setCount(prevCount => prevCount - 1);
+    }
     
     return(
         <div className="container">
@@ -138,7 +149,7 @@ export default function ProfileList(){
                     {isAdmin && (
                         <>
                             <button>Edit</button>
-                            <button>Delete</button>
+                            <button onClick={() => handleDeleteProfile(profile.id)}>Delete</button>
                         </>
                     )}
                     <button onClick={() => handleSummaryClick(profile)}>SUMMARY</button>
@@ -160,7 +171,7 @@ export default function ProfileList(){
 function AddModal({count, onSave, onClose}){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [photo, setPhoto] = useState('');
+    const [photo, setPhoto] = useState('https://placehold.co/60x60');
     const [location, setLocation] = useState('');
     const [contact, setContact] = useState('');
     const [interests, setInterests] = useState('');
