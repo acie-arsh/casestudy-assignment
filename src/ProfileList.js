@@ -66,6 +66,8 @@ export default function ProfileList(){
     
     const [showModal, setShowModal] = useState(false);
     const [selectedProfile, setSelectedProfile] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [adminPassword, setAdminPassword] = useState('');
 
     const handleSummaryClick = (profile) => {
         setSelectedProfile(profile);
@@ -76,26 +78,57 @@ export default function ProfileList(){
         setShowModal(false);
         setSelectedProfile(null);
     }
+
+    const handlePasswordChange = (e) => {
+        setAdminPassword(e.target.value);
+    }
+
+    const handleAdminLogin = () => {
+        if (adminPassword === 'water') {
+            setIsAdmin(true);
+        } else {
+            alert('Incorrect Password');
+        }
+    }
     
     return(
         <div className="container">
+            
+            {!isAdmin && (
+                <div className="adminLogin">
+                    <input
+                        type="password"
+                        placeholder="Type 'water'"
+                        value={adminPassword}
+                        onChange={handlePasswordChange}
+                    />
+                    <button onClick={handleAdminLogin}>Login</button>
+                </div>
+            )}
+            
             {profiles.map((profile) => (
                 <div key={profile.id} className="profileSmall">
                     <img src={profile.photo} alt={profile.name} className="profilePhoto" height="900" width="60"/>
                     <h3 className="profileSmallName">{profile.name}</h3>
                     <p className="profileSmallDesc">{profile.description}</p>
+                    {isAdmin && (
+                        <>
+                            <button>Edit</button>
+                            <button>Delete</button>
+                        </>
+                    )}
                     <button onClick={() => handleSummaryClick(profile)}>SUMMARY</button>
                 </div>
             ))}
 
             {showModal && (
-                <Modal profile={selectedProfile} onClose={handleCloseModal} />
+                <SummaryModal profile={selectedProfile} onClose={handleCloseModal} />
             )}
         </div>
     );
 }
 
-function Modal({profile,onClose}){
+function SummaryModal({profile,onClose}){
     
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWNpZS1hcnNoIiwiYSI6ImNtMGdiZmdsMjBzMDMyanM3d2d0YW44aHAifQ.D0v1OnVBLTKFoAIKRFHwAA';
 
