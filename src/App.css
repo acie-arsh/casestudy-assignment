@@ -1,5 +1,9 @@
-.map-container {
+*{
+    box-sizing: border-box;
+}
 
-    height: 400px;
-  
-  }
+.App{
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: 100dvh;
+}

@@ -2,6 +2,80 @@
     box-sizing: border-box;
 }
 
+.profileSmall{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 2.5dvh;
+    border-radius: 18px;
+}
+
+.profilePhoto{
+    border-radius: 18px 0 0 18px;
+    height:max-content;
+}
+
+.profileSmallName{
+    width:20;
+    text-align: left;
+}
+
+.profileSmallDesc{
+    width: 50%;
+    text-align: left;
+}
+
+.profileSmall button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 0px;
+    margin-right: 1dvw;
+    font-size: 1em;
+    background: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+    padding: 8px 0.8dvw;
+    font-weight: bold;
+}
+
+.profileSmall button:hover{
+   animation-name: summarybutton;
+   animation-duration: 0.4s;
+   animation-iteration-count: infinite;
+}
+
+.profileSmall button:active{
+    padding: 8px 0.4dvw;
+    background-color: #FFFB7D;
+}
+
+@keyframes summarybutton{
+    0% {background: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);}
+    5% {background: linear-gradient(45deg, #85FFBD 10%, #FFFB7D 100%);}
+    10% {background: linear-gradient(45deg, #85FFBD 20%, #FFFB7D 100%);}
+    15% {background: linear-gradient(45deg, #85FFBD 30%, #FFFB7D 100%);}
+    20% {background: linear-gradient(45deg, #85FFBD 40%, #FFFB7D 100%);}
+    25% {background: linear-gradient(45deg, #85FFBD 50%, #FFFB7D 100%);}
+    30% {background: linear-gradient(45deg, #85FFBD 60%, #FFFB7D 100%);}
+    35% {background: linear-gradient(45deg, #85FFBD 70%, #FFFB7D 100%);}
+    40% {background: linear-gradient(45deg, #85FFBD 80%, #FFFB7D 100%);}
+    45% {background: linear-gradient(45deg, #85FFBD 90%, #FFFB7D 100%);}
+    50% {background: linear-gradient(45deg, #85FFBD 100%, #FFFB7D 100%);}
+    55% {background: linear-gradient(45deg, #FFFB7D 5%, #85FFBD 100% );}
+    60% {background: linear-gradient(45deg, #FFFB7D 20%, #85FFBD 100% );}
+    65% {background: linear-gradient(45deg, #FFFB7D 30%, #85FFBD 100% );}
+    70% {background: linear-gradient(45deg, #FFFB7D 40%, #85FFBD 100% );}
+    75% {background: linear-gradient(45deg, #FFFB7D 50%, #85FFBD 100% );}
+    80% {background: linear-gradient(45deg, #FFFB7D 60%, #85FFBD 100% );}
+    85% {background: linear-gradient(45deg, #FFFB7D 70%, #85FFBD 100% );}
+    90% {background: linear-gradient(45deg, #FFFB7D 80%, #85FFBD 100% );}
+    95% {background: linear-gradient(45deg, #FFFB7D 90%, #85FFBD 100% );}
+    100% {background: linear-gradient(45deg, #FFFB7D 100%, #85FFBD 100%);}
+}
+
+
+
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -12,15 +86,64 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 .modalContent {
-    background: white;
+    background: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
     padding: 20px;
     border-radius: 5px;
     max-width: 500px;
     width: 90%;
+    color: darkslategrey;
+}
+
+.modalCloseButton{
+    background: rgba(0, 0, 0, 0);
+    border: 0px;
+    font-size: 2em;
+    position:relative;
+    left: 95%;
+    font-weight: lighter;
+    color: rgba(0, 0, 0, 1);
+    margin: 0;
+}
+
+.modalCloseButton:hover{
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.modalContent h1{
+    margin-left:1%;
+}
+
+
+.mapSidebar{
+    background-color: rgb(35 55 75 / 90%);
+    color: #fff;
+    width:auto;
+    padding: 6px 12px;
+    padding-right: 27px;
+    font-family: monospace;
+    font-weight: bold;
+    z-index: 1;
+    position:fixed;
+    margin: 0px;
+    border-radius: 12px 12px 0px 0px;
 }
 
 .mapContainer {
     height: 400px;
+    border-radius: 12px;
+    border-image: linear-gradient (#D9AFD9 0%, #97D9E1 100%);
+    border: 10px;
+}
+
+.marker{
+    background-image: "./content/map/marker-editor.svg";
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
 }

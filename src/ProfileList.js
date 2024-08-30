@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import "./ProfileList.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 const profiles = [
     {
@@ -39,7 +41,7 @@ const profiles = [
     {
         id : 4,
         name : "Nikhil Dulani",
-        description: "At 46 years of age, Troy is a veteran chef!",
+        description: "At 46 years of age, Nikhil is a veteran chef!",
         photo: "https://randomuser.me/api/portraits/lego/8.jpg",
         location:"",
         contact:"",
@@ -79,10 +81,10 @@ export default function ProfileList(){
         <div className="container">
             {profiles.map((profile) => (
                 <div key={profile.id} className="profileSmall">
-                    <img src={profile.photo} alt={profile.name} className="profilePhoto" height="40" width="40"/>
-                    <h1 className="profileSmallName">{profile.name}</h1>
+                    <img src={profile.photo} alt={profile.name} className="profilePhoto" height="900" width="60"/>
+                    <h3 className="profileSmallName">{profile.name}</h3>
                     <p className="profileSmallDesc">{profile.description}</p>
-                    <button onClick={() => handleSummaryClick(profile)}>Summary</button>
+                    <button onClick={() => handleSummaryClick(profile)}>SUMMARY</button>
                 </div>
             ))}
 
@@ -98,27 +100,56 @@ function Modal({profile,onClose}){
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWNpZS1hcnNoIiwiYSI6ImNtMGdiZmdsMjBzMDMyanM3d2d0YW44aHAifQ.D0v1OnVBLTKFoAIKRFHwAA';
 
     const mapContainer = useRef(null);
-    const map = useRef(null);
-    const [lng, setLng] = useState(profile.maplng);
-    const [lat, setLat] = useState(profile.maplat);
-    const [zoom, setZoom] = useState(15);
+
+    const [lng] = useState(profile.maplng);
+    const [lat] = useState(profile.maplat);
+    const [zoom] = useState(18);
 
     useEffect(() => {
-        if (map.current) return;
-        map.current = new mapboxgl.Map({
+        
+        const geoJson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [lng,lat]
+                    },
+                    properties: {
+                        title: profile.name,
+                        description: profile.location
+                    }
+                }
+            ]
+        }
+        
+        const map = new mapboxgl.Map({
             container : mapContainer.current,
             style : 'mapbox://styles/mapbox/streets-v12',
             center : [lng, lat],
             zoom : zoom
         });
+
+        geoJson.features.map((feature) => (
+            new mapboxgl.Marker().setLngLat(feature.geometry.coordinates).addTo(map)
+        ));
+
+        map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+
+        return () => map.remove();
     })
     
     return(
         <div className="modalOverlay">
             <div className="modalContent">
+                <button onClick={onClose} className='modalCloseButton'>X</button>
                 <h1>{profile.name}'s Location</h1>
-                <div ref={mapContainer} className='mapContainer'></div>
-                <button onClick={onClose}>Close</button>
+                <div className="mapSidebar">
+                    Latitude: {lat} | Longitude: {lng}
+                </div>
+                <div ref={mapContainer} className='mapContainer' />
+                
             </div>
         </div>
     );
